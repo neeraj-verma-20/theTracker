@@ -67,7 +67,14 @@ export default function Dashboard({ session }: { session: Session }) {
     if (!newActivityName.trim()) return;
 
     const colors = ["#ef4444", "#f97316", "#f59e0b", "#10b981", "#06b6d4", "#3b82f6", "#8b5cf6", "#ec4899"];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    // Find colors not currently in use by the user
+    const usedColors = new Set(activities.map(a => a.color));
+    const availableColors = colors.filter(c => !usedColors.has(c));
+    
+    // If all colors are used, fallback to standard random logic. Otherwise pick from available.
+    const colorPool = availableColors.length > 0 ? availableColors : colors;
+    const randomColor = colorPool[Math.floor(Math.random() * colorPool.length)];
 
     const { error } = await supabase.from("activities").insert([
       {
