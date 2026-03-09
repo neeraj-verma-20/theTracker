@@ -6,6 +6,7 @@ import { Session } from "@supabase/supabase-js";
 import { Activity, ActivityLog } from "@/lib/types";
 import { startOfMonth, endOfMonth, format, addMonths, subMonths, eachDayOfInterval } from "date-fns";
 import { LogOut, ChevronLeft, ChevronRight, Plus, Trash2, Edit2 } from "lucide-react";
+import AnalyticsCards from "./AnalyticsCards";
 
 export default function Dashboard({ session }: { session: Session }) {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -346,6 +347,10 @@ export default function Dashboard({ session }: { session: Session }) {
           </div>
         )}
       </div>
+
+      {!loading && activities.length > 0 && (
+        <AnalyticsCards activities={activities} logs={logs} currentMonth={currentMonth} />
+      )}
     </div>
   );
 }
